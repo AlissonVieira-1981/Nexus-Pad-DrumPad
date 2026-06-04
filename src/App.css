@@ -1,0 +1,622 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap");
+
+:root {
+  --neon: #39ff14;
+  --neon-soft: #b8ffb0;
+  --text: #eaffea;
+  --danger: #ff7070;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background: #000;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button,
+select,
+span {
+  min-width: 0;
+}
+
+.app {
+  --page-pad: clamp(12px, 2.8vw, 48px);
+  --stage-width: 1120px;
+  --content-height: auto;
+
+  --menu-columns: 260px minmax(0, 1fr) 260px;
+  --menu-gap: clamp(14px, 2vw, 24px);
+  --menu-bottom: clamp(16px, 2.7vh, 28px);
+
+  --select-width: 260px;
+  --select-height: clamp(36px, 4.8vh, 46px);
+  --select-font: 11px;
+  --label-font: 11px;
+
+  --title-size: clamp(38px, 4vw, 48px);
+
+  --metronome-width: 520px;
+  --metronome-columns: auto auto auto minmax(118px, 1fr) minmax(118px, 1fr);
+  --metronome-gap: 8px;
+  --metronome-height: 32px;
+  --metronome-font: 9px;
+  --metronome-margin: 10px;
+  --metronome-pad-x: 12px;
+  --bpm-width: 76px;
+
+  --bar-bottom: clamp(16px, 2.4vh, 24px);
+  --stop-pad-y: 12px;
+  --stop-pad-x: 24px;
+  --stop-font: 11px;
+
+  --pad-gap: clamp(10px, 1.2vw, 14px);
+  --pad-height: clamp(76px, 11.2vh, 116px);
+  --pad-font: clamp(20px, 2.4vw, 30px);
+
+  --drum-top: clamp(12px, 2vh, 20px);
+  --drum-gap: clamp(8px, 1vw, 12px);
+  --drum-height: clamp(38px, 5.8vh, 60px);
+  --drum-font: clamp(8px, 1.1vw, 13px);
+  --drum-title: 14px;
+
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  padding: var(--page-pad);
+  overflow: hidden;
+  color: var(--text);
+  font-family: "Space Grotesk", Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(57, 255, 20, 0.28), transparent 18rem),
+    radial-gradient(circle at 18% 78%, rgba(0, 255, 170, 0.18), transparent 20rem),
+    radial-gradient(circle at 82% 72%, rgba(57, 255, 20, 0.12), transparent 18rem),
+    linear-gradient(135deg, #010402 0%, #041008 42%, #000 100%);
+}
+
+.app::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(57, 255, 20, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 20, 0.08) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 72%);
+  opacity: 0.65;
+}
+
+.app::after {
+  content: "";
+  position: fixed;
+  inset: -40%;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 42%, rgba(57, 255, 20, 0.08) 44%, transparent 46%),
+    linear-gradient(65deg, transparent 0 52%, rgba(0, 255, 170, 0.06) 54%, transparent 56%);
+  animation: backgroundScan 9s linear infinite;
+}
+
+.appContent {
+  position: relative;
+  z-index: 1;
+  width: min(var(--stage-width), 100%);
+  height: var(--content-height);
+  max-height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.menuRow,
+.presetBar,
+.pads,
+.drumSection {
+  width: 100%;
+  max-width: var(--stage-width);
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.menuRow {
+  margin-bottom: var(--menu-bottom);
+  display: grid;
+  grid-template-columns: var(--menu-columns);
+  align-items: center;
+  gap: var(--menu-gap);
+}
+
+.menuControl {
+  width: min(var(--select-width), 100%);
+  display: grid;
+  gap: 8px;
+}
+
+.menuControl:first-child {
+  justify-self: start;
+}
+
+.menuControl:last-child {
+  justify-self: end;
+}
+
+.menuControl span {
+  color: var(--neon);
+  font-size: var(--label-font);
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.menuControl select {
+  width: 100%;
+  height: var(--select-height);
+  border: 2px solid rgba(57, 255, 20, 0.45);
+  border-radius: 999px;
+  background: rgba(5, 8, 6, 0.86);
+  color: var(--neon-soft);
+  padding: 0 16px;
+  font-size: var(--select-font);
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 0 22px rgba(57, 255, 20, 0.16);
+}
+
+.header {
+  min-width: 0;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--neon);
+  font-size: var(--title-size);
+  line-height: 1;
+  letter-spacing: 0;
+  font-weight: 700;
+  text-shadow:
+    0 0 12px rgba(57, 255, 20, 0.9),
+    0 0 34px rgba(57, 255, 20, 0.45);
+}
+
+.metronomePanel {
+  width: min(var(--metronome-width), 100%);
+  margin: var(--metronome-margin) auto 0;
+  display: grid;
+  grid-template-columns: var(--metronome-columns);
+  align-items: center;
+  justify-content: center;
+  gap: var(--metronome-gap);
+}
+
+.metronomeButton,
+.tapButton,
+.bpmDisplay,
+.rhythmSelect,
+.modeSelect {
+  width: 100%;
+  height: var(--metronome-height);
+  min-width: 0;
+  border: 2px solid rgba(57, 255, 20, 0.45);
+  border-radius: 999px;
+  background: rgba(5, 8, 6, 0.86);
+  color: var(--neon-soft);
+  font-size: var(--metronome-font);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 16px rgba(57, 255, 20, 0.15);
+  white-space: nowrap;
+}
+
+.metronomeButton,
+.tapButton {
+  width: auto;
+  padding: 0 var(--metronome-pad-x);
+  cursor: pointer;
+}
+
+.bpmDisplay {
+  min-width: var(--bpm-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rhythmSelect,
+.modeSelect {
+  padding: 0 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+.metronomeButton.active {
+  border-color: var(--neon);
+  color: var(--neon);
+  animation: neonPulse 1.2s ease-in-out infinite;
+}
+
+.tapButton:hover,
+.metronomeButton:hover,
+.rhythmSelect:hover,
+.modeSelect:hover {
+  border-color: var(--neon);
+  color: var(--neon);
+}
+
+.presetBar {
+  margin-bottom: var(--bar-bottom);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stopButton {
+  border: 2px solid rgba(255, 70, 70, 0.7);
+  border-radius: 999px;
+  background: rgba(255, 70, 70, 0.08);
+  color: var(--danger);
+  padding: var(--stop-pad-y) var(--stop-pad-x);
+  font-size: var(--stop-font);
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.stopButton:hover {
+  border-color: #ff3b3b;
+  background: #ff3b3b;
+  color: #120202;
+  box-shadow:
+    0 0 18px rgba(255, 59, 59, 0.75),
+    0 0 42px rgba(255, 59, 59, 0.35);
+}
+
+.pads,
+.drumPads {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pads {
+  gap: var(--pad-gap);
+}
+
+.drumPads {
+  gap: var(--drum-gap);
+}
+
+.pad,
+.drumPad {
+  min-width: 0;
+  border: 3px solid rgba(57, 255, 20, 0.35);
+  background: rgba(57, 255, 20, 0.08);
+  color: var(--neon);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.pad {
+  height: var(--pad-height);
+  border-radius: 14px;
+  font-size: var(--pad-font);
+  box-shadow:
+    inset 0 0 22px rgba(57, 255, 20, 0.08),
+    0 0 18px rgba(57, 255, 20, 0.16);
+}
+
+.pad:hover,
+.drumPad:hover,
+.activePad {
+  border-color: var(--neon);
+  animation: neonPulse 1.2s ease-in-out infinite;
+}
+
+.drumSection {
+  margin-top: var(--drum-top);
+  text-align: center;
+}
+
+.drumSection h2 {
+  margin: 0 0 10px;
+  color: var(--neon) !important;
+  font-size: var(--drum-title);
+  line-height: 1;
+  text-shadow:
+    0 0 8px rgba(57, 255, 20, 0.95),
+    0 0 22px rgba(57, 255, 20, 0.55),
+    0 0 42px rgba(57, 255, 20, 0.25);
+}
+
+.drumPad {
+  height: var(--drum-height);
+  border-width: 2px;
+  border-radius: 12px;
+  color: var(--neon-soft);
+  font-size: var(--drum-font);
+  letter-spacing: 0.4px;
+}
+
+option {
+  background: #051006;
+  color: var(--neon-soft);
+}
+
+@keyframes neonPulse {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 30px rgba(57, 255, 20, 0.16),
+      0 0 18px rgba(57, 255, 20, 0.35);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 42px rgba(57, 255, 20, 0.28),
+      0 0 34px rgba(57, 255, 20, 0.75),
+      0 0 70px rgba(57, 255, 20, 0.35);
+  }
+}
+
+@keyframes backgroundScan {
+  0%,
+  100% {
+    transform: translateX(-8%) translateY(-4%);
+  }
+
+  50% {
+    transform: translateX(8%) translateY(4%);
+  }
+}
+
+@media (orientation: portrait) and (max-width: 599px) {
+  .app {
+    --page-pad: 12px;
+    --stage-width: 100%;
+    --content-height: 100%;
+
+    --menu-columns: 1fr;
+    --menu-gap: 10px;
+    --menu-bottom: 14px;
+
+    --select-width: 230px;
+    --select-height: 36px;
+    --select-font: 10px;
+    --label-font: 9px;
+
+    --title-size: clamp(30px, 8vw, 36px);
+
+    --metronome-width: 100%;
+    --metronome-columns: repeat(2, minmax(0, 1fr));
+    --metronome-gap: 6px;
+    --metronome-height: 30px;
+    --metronome-font: 8px;
+    --metronome-margin: 8px;
+    --metronome-pad-x: 10px;
+    --bpm-width: 0;
+
+    --bar-bottom: 14px;
+    --stop-pad-y: 9px;
+    --stop-pad-x: 22px;
+    --stop-font: 10px;
+
+    --pad-gap: 8px;
+    --pad-height: clamp(54px, 9.2vh, 78px);
+    --pad-font: clamp(16px, 4.8vw, 20px);
+
+    --drum-top: 12px;
+    --drum-gap: 7px;
+    --drum-height: clamp(34px, 5.8vh, 48px);
+    --drum-font: 7px;
+    --drum-title: 10px;
+  }
+
+  .menuRow {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .menuControl,
+  .menuControl:first-child,
+  .menuControl:last-child {
+    justify-self: center;
+  }
+
+  .modeSelect {
+    grid-column: 1 / -1;
+  }
+
+  .metronomeButton,
+  .tapButton {
+    width: 100%;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 600px) and (max-width: 1024px) {
+  .app {
+    --page-pad: 18px;
+    --stage-width: 780px;
+    --content-height: 100%;
+
+    --menu-columns: 160px minmax(0, 1fr) 160px;
+    --menu-gap: 14px;
+    --menu-bottom: 24px;
+
+    --select-width: 160px;
+    --select-height: 40px;
+    --select-font: 10px;
+    --label-font: 10px;
+
+    --title-size: 44px;
+
+    --metronome-width: 420px;
+    --metronome-columns: auto auto auto minmax(92px, 1fr) minmax(92px, 1fr);
+    --metronome-gap: 6px;
+    --metronome-height: 32px;
+    --metronome-font: 8px;
+    --metronome-margin: 8px;
+    --metronome-pad-x: 10px;
+    --bpm-width: 68px;
+
+    --bar-bottom: 24px;
+    --stop-pad-y: 11px;
+    --stop-pad-x: 28px;
+    --stop-font: 11px;
+
+    --pad-gap: 14px;
+    --pad-height: clamp(140px, 15vh, 190px);
+    --pad-font: 24px;
+
+    --drum-top: 22px;
+    --drum-gap: 12px;
+    --drum-height: clamp(54px, 7vh, 74px);
+    --drum-font: 9px;
+    --drum-title: 12px;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 700px) and (max-width: 1180px) {
+  .app {
+    --page-pad: 18px 28px;
+    --stage-width: 1060px;
+    --content-height: 100%;
+
+    --menu-columns: 220px minmax(0, 1fr) 220px;
+    --menu-gap: 18px;
+    --menu-bottom: 20px;
+
+    --select-width: 220px;
+    --select-height: 40px;
+    --select-font: 10px;
+    --label-font: 10px;
+
+    --title-size: 44px;
+
+    --metronome-width: 500px;
+    --metronome-columns: auto auto auto minmax(110px, 1fr) minmax(110px, 1fr);
+    --metronome-gap: 7px;
+    --metronome-height: 32px;
+    --metronome-font: 8px;
+    --metronome-margin: 8px;
+    --metronome-pad-x: 10px;
+    --bpm-width: 72px;
+
+    --bar-bottom: 20px;
+    --stop-pad-y: 11px;
+    --stop-pad-x: 28px;
+    --stop-font: 11px;
+
+    --pad-gap: 14px;
+    --pad-height: clamp(86px, 13vh, 124px);
+    --pad-font: 24px;
+
+    --drum-top: 18px;
+    --drum-gap: 12px;
+    --drum-height: clamp(44px, 6.6vh, 62px);
+    --drum-font: 9px;
+    --drum-title: 12px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .app {
+    --page-pad: 10px 18px;
+    --stage-width: 96vw;
+    --content-height: 100%;
+
+    --menu-columns: 150px minmax(0, 1fr) 150px;
+    --menu-gap: 8px;
+    --menu-bottom: 5px;
+
+    --select-width: 150px;
+    --select-height: 28px;
+    --select-font: 8px;
+    --label-font: 8px;
+
+    --title-size: 26px;
+
+    --metronome-width: 390px;
+    --metronome-columns: auto auto auto minmax(82px, 1fr) minmax(82px, 1fr);
+    --metronome-gap: 5px;
+    --metronome-height: 24px;
+    --metronome-font: 7px;
+    --metronome-margin: 5px;
+    --metronome-pad-x: 8px;
+    --bpm-width: 56px;
+
+    --bar-bottom: 5px;
+    --stop-pad-y: 7px;
+    --stop-pad-x: 18px;
+    --stop-font: 9px;
+
+    --pad-gap: 6px;
+    --pad-height: clamp(34px, 10.2vh, 45px);
+    --pad-font: 14px;
+
+    --drum-top: 5px;
+    --drum-gap: 6px;
+    --drum-height: clamp(24px, 7.4vh, 34px);
+    --drum-font: 7px;
+    --drum-title: 9px;
+  }
+
+  .menuControl {
+    gap: 3px;
+  }
+
+  .header h1 {
+    margin-bottom: 0;
+  }
+
+  .drumSection h2 {
+    margin-bottom: 4px;
+  }
+
+  .pad:hover,
+  .drumPad:hover {
+    transform: none;
+  }
+}
+
+@media (orientation: portrait) and (max-height: 640px) {
+  .app {
+    --page-pad: 8px;
+    --menu-gap: 8px;
+    --menu-bottom: 10px;
+    --select-height: 32px;
+    --title-size: 28px;
+    --metronome-height: 27px;
+    --metronome-margin: 6px;
+    --bar-bottom: 10px;
+    --pad-height: 50px;
+    --drum-top: 8px;
+    --drum-height: 31px;
+  }
+}
